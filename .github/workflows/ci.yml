@@ -1,0 +1,28 @@
+name: CI
+
+on:
+    push:
+    workflow_dispatch:
+    pull_request:
+      types: [opened, synchronize]
+
+jobs:
+    build:
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Clone project
+          uses: actions/checkout@v4
+
+        - name: Install software (JDK)
+          uses: actions/setup-java@v4
+          with:
+            distribution: temurin
+            java-version: '17'
+            cache: maven
+
+        - name: Build project
+          run: mvn -B compile
+
+        - name: Run unit tests
+          run: mvn -B test
